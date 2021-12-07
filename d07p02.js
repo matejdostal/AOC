@@ -2,13 +2,17 @@ const input = `1101,1,29,67,1102,0,1,65,1008,65,35,66,1005,66,28,1,67,65,20,4,0,
 
 const positions = input.trim().split(",").map(Number);
 
-const compute_fuel = (distance) => {
-    let fuel = 0;
-    for (let i = 1; i <= distance; i++) {
-        fuel += i;
-    }
-    return fuel;
-};
+// const compute_fuel = (distance) => {
+//     let fuel = 0;
+//     for (let i = 1; i <= distance; i++) {
+//         fuel += i;
+//     }
+//     return fuel;
+// };
+
+const computed_fuels = [];
+const compute_fuel = (distance) =>
+    distance ? computed_fuels[distance] || (computed_fuels[distance] = distance + compute_fuel(distance - 1)) : 0;
 
 let min_fuel = Infinity;
 let min_position = null;
