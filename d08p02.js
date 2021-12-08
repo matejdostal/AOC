@@ -283,3 +283,42 @@ for (let i = 0; i < entries.length; i++) {
 }
 
 console.log("result = " + result);
+
+/*
+
+
+0: 6	abc.efg		xxx.xxx
+1: 2	..c..f.		..x..x.
+2: 5	a.cde.g		x.xxx.x
+3: 5	a.cd.fg		x.xx.xx
+4: 4	.bcd.f.		.xxx.x.
+5: 5	ab.d.fg		xx.x.xx
+6: 6	ab.defg		xx.xxxx
+7: 3	a.c..f.		x.x..x.
+8: 7	abcdefg		xxxxxxx
+9: 6	abcd.fg		xxxx.xx
+
+
+1 = ..c..f.	2
+7 = a.c..f.	3
+4 = .bcd.f.	4
+2 = a.cde.g	5
+3 = a.cd.fg	5
+5 = ab.d.fg	5
+0 = abc.efg	6
+6 = ab.defg	6
+9 = abcd.fg	6
+8 = abcdefg	7
+
+
+e = 4
+b = 6
+d = 7
+g = 7
+a = 8
+c = 8
+f = 9
+
+
+
+*/
