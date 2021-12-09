@@ -113,15 +113,18 @@ const rows = input
     .trim()
     .split("\n")
     .map((row) => row.split("").map(Number));
+// console.log(rows);
 
 const rowsCount = rows.length;
 const colsCount = rows[0].length;
+// console.log({ rowsCount, colsCount });
 
 isValidPoint = (ri, ci) => {
     return ri >= 0 && ri < rowsCount && ci >= 0 && ci < colsCount;
 };
 
-const isLowPoint = (ri, ci, value) => {
+const isLowPoint = (ri, ci) => {
+    const value = rows[ri][ci];
     return (
         (!isValidPoint(ri - 1, ci) || value < rows[ri - 1][ci]) &&
         (!isValidPoint(ri + 1, ci) || value < rows[ri + 1][ci]) &&
@@ -130,15 +133,40 @@ const isLowPoint = (ri, ci, value) => {
     );
 };
 
-let riskLevel = 0;
+const findBasinPoints = (ri, ci) => {
+    const value = rows[ri][ci];
+    let basinPoints = [[ri, ci]];
+    if (isValidPoint(ri - 1, ci) && value < rows[ri - 1][ci] && rows[ri - 1][ci] !== 9) {
+        basinPoints = [...basinPoints, ...findBasinPoints(ri - 1, ci)];
+    }
+    if (isValidPoint(ri + 1, ci) && value < rows[ri + 1][ci] && rows[ri + 1][ci] !== 9) {
+        basinPoints = [...basinPoints, ...findBasinPoints(ri + 1, ci)];
+    }
+    if (isValidPoint(ri, ci - 1) && value < rows[ri][ci - 1] && rows[ri][ci - 1] !== 9) {
+        basinPoints = [...basinPoints, ...findBasinPoints(ri, ci - 1)];
+    }
+    if (isValidPoint(ri, ci + 1) && value < rows[ri][ci + 1] && rows[ri][ci + 1] !== 9) {
+        basinPoints = [...basinPoints, ...findBasinPoints(ri, ci + 1)];
+    }
+    return basinPoints;
+};
 
+let basinSizes = [];
 for (let ri = 0; ri < rowsCount; ri++) {
     for (let ci = 0; ci < colsCount; ci++) {
-        const value = rows[ri][ci];
-        if (isLowPoint(ri, ci, value)) {
-            riskLevel += value + 1;
+        if (isLowPoint(ri, ci)) {
+            const basinPoints = findBasinPoints(ri, ci)
+                .map(([ri, ci]) => "" + ri + "," + ci)
+                .sort();
+            const uniqBasinPoints = [...new Set(basinPoints)];
+            basinSizes.push(uniqBasinPoints.length);
         }
     }
 }
+// console.log(basinSizes);
 
-console.log("result = " + riskLevel);
+const sortedBasinSizes = basinSizes.sort((a, b) => b - a);
+// console.log(sortedBasinSizes);
+
+const result = sortedBasinSizes[0] * sortedBasinSizes[1] * sortedBasinSizes[2];
+console.log("result = " + result);
